@@ -11,5 +11,8 @@ data class GameState(
     val holeX: Float = 0.85f,
     val holeY: Float = 0.50f,
 
-    val holeCompleted: Boolean = false
+    val holeCompleted: Boolean = false,
+
+    val aimAngleDegrees: Float = 0f,
+    val waypoints: List<Pair<Float, Float>> = emptyList()
 )
