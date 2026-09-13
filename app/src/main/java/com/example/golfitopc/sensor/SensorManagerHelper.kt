@@ -22,10 +22,16 @@ class SensorManagerHelper(
     private var lastShotTime = 0L
 
     // Evita que pequeñas vibraciones generen golpes
-    private val movementThreshold = 4.0f
+    private val movementThreshold = 2.5f
 
     // Evita detectar varios golpes seguidos
     private val shotCooldown = 1000L
+
+    // Callback dinámico opcional para actualizar el palito de dirección en tiempo real
+    var onDirectionChanged: ((Float) -> Unit)? = null
+
+    // Callback dinámico opcional para actualizar la barra de fuerza en tiempo real en la pantalla
+    var onAccelerationChanged: ((Float) -> Unit)? = null
 
     fun start() {
         accelerometer?.let {
@@ -51,6 +57,10 @@ class SensorManagerHelper(
         val y = event.values[1]
         val z = event.values[2]
 
+        // Calculamos la dirección del palito continuamente inclinando el celular sin necesidad de tirar fuerte
+        val currentDirection = Math.toDegrees(atan2(y.toDouble(), x.toDouble())).toFloat()
+        onDirectionChanged?.invoke(currentDirection)
+
         // Magnitud de la aceleración
         val acceleration = sqrt(
             x * x +
@@ -60,6 +70,10 @@ class SensorManagerHelper(
 
         // Eliminamos aproximadamente la gravedad
         val movement = kotlin.math.abs(acceleration - SensorManager.GRAVITY_EARTH)
+
+        // Enviamos continuamente el porcentaje de movimiento para la barra de fuerza (de 0.0f a 1.0f)
+        val realtimePowerPercentage = (movement / 15f).coerceIn(0.0f, 1.0f)
+        onAccelerationChanged?.invoke(realtimePowerPercentage)
 
         // Si el movimiento es pequeño, no hacemos nada
         if (movement < movementThreshold) {
@@ -75,15 +89,10 @@ class SensorManagerHelper(
 
         lastShotTime = currentTime
 
-        // Convertimos el movimiento en una fuerza entre 0 y 1
-        val force = (movement / 15f).coerceIn(0.1f, 1.0f)
+        // Convertimos el movimiento en una fuerza entre 0 y 1, haciéndola más sensible multiplicando por 1.8f
+        val force = ((movement / 15f) * 1.8f).coerceIn(0.1f, 1.0f)
 
-        // Calculamos dirección usando X e Y
-        val direction = Math.toDegrees(
-            atan2(y.toDouble(), x.toDouble())
-        ).toFloat()
-
-        onShotDetected(force, direction)
+        onShotDetected(force, currentDirection)
     }
 
     override fun onAccuracyChanged(
