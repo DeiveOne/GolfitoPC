@@ -20,8 +20,8 @@ fun SwingDetector(onSwing: (Float) -> Unit) {
 
         val listener = object : SensorEventListener {
             private var lastUpdate: Long = 0
-            private val SWING_THRESHOLD = 12.0f
-            private val MAX_SWING = 40.0f
+            private val SWING_THRESHOLD = 7.0f
+            private val MAX_SWING = 30.0f
 
             override fun onSensorChanged(event: SensorEvent?) {
                 event?.let {
@@ -36,7 +36,8 @@ fun SwingDetector(onSwing: (Float) -> Unit) {
 
                         if (magnitude > SWING_THRESHOLD) {
                             lastUpdate = currentTime
-                            val normalizedForce = (magnitude / MAX_SWING).coerceIn(0.1f, 1.0f)
+                            // Aumentar la sensibilidad multiplicando la fuerza resultante por 1.8f
+                            val normalizedForce = ((magnitude / MAX_SWING) * 1.8f).coerceIn(0.1f, 1.0f)
                             onSwing(normalizedForce)
                         }
                     }

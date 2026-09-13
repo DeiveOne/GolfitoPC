@@ -1,6 +1,6 @@
 package com.example.golfitopc.model
 
-data class ole(
+data class Hole(
     val number: Int,
     val par: Int,
     val startX: Float,
