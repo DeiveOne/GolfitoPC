@@ -16,16 +16,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
@@ -45,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.golfitopc.game.GameState
 import com.example.golfitopc.game.SensorMode
+import com.example.golfitopc.game.getObstaclesForLevel // <- Importante: Lee los datos del motor
 import com.example.golfitopc.ui.theme.GolfBallWhite
 import com.example.golfitopc.ui.theme.GolfCourseGreen
 import com.example.golfitopc.ui.theme.GolfHoleBlack
@@ -185,7 +183,6 @@ fun MainGameView(
             }
         }
 
-        // BARRA VISUAL DE FUERZA DE TIRO (POWER METER) CON COLOR DEGRADADO DINÁMICO
         Spacer(modifier = Modifier.height(8.dp))
         Card(
             modifier = Modifier.fillMaxWidth(),
@@ -215,7 +212,6 @@ fun MainGameView(
                     )
                 }
                 Spacer(modifier = Modifier.height(6.dp))
-                // Contenedor de fondo de la barra de progreso
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -223,7 +219,6 @@ fun MainGameView(
                         .clip(RoundedCornerShape(7.dp))
                         .background(Color(0xFFE0E0E0))
                 ) {
-                    // Relleno de la barra dinámico con un gradiente de color (Verde -> Amarillo -> Rojo)
                     Box(
                         modifier = Modifier
                             .fillMaxWidth(fraction = state.currentSensorAcceleration.coerceIn(0f, 1f))
@@ -238,7 +233,6 @@ fun MainGameView(
             }
         }
 
-        // Fila expansiva para mostrar la Tarjeta de Puntuación Histórica (Scorecard) eliminada de aquí para moverse al Home
         Spacer(modifier = Modifier.height(12.dp))
 
         Box(
@@ -273,11 +267,29 @@ fun MainGameView(
                     y = state.holeY * size.height
                 )
 
-                // Campo
+                // Fondo y mapa base
                 drawRect(color = GolfCourseGreen)
                 drawRect(color = Color(0xFF1B5E20), style = Stroke(width = 10f))
 
-                // Hoyo (Más grande: 35f)
+                // Dibujar Obstáculos desde la configuración centralizada
+                val currentObstacles = getObstaclesForLevel(state.holeNumber)
+                currentObstacles.forEach { obs ->
+                    // Base del muro
+                    drawRect(
+                        color = Color(0xFF5D4037),
+                        topLeft = Offset(obs.x * size.width, obs.y * size.height),
+                        size = Size(obs.width * size.width, obs.height * size.height)
+                    )
+                    // Borde decorativo
+                    drawRect(
+                        color = Color(0xFF3E2723),
+                        topLeft = Offset(obs.x * size.width, obs.y * size.height),
+                        size = Size(obs.width * size.width, obs.height * size.height),
+                        style = Stroke(width = 4f)
+                    )
+                }
+
+                // Hoyo
                 drawCircle(
                     color = GolfHoleBlack,
                     radius = 35f,
@@ -300,7 +312,7 @@ fun MainGameView(
                     )
                 }
 
-                // Pelota (Si está completado, se dibuja en el centro del hoyo)
+                // Pelota
                 val finalBallPos = if (state.holeCompleted) holePosition else ballPosition
                 drawCircle(
                     color = GolfBallWhite,

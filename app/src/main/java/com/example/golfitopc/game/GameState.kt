@@ -10,11 +10,11 @@ data class GameState(
     val par: Int = 3,
     val strokes: Int = 0,
 
-    val ballX: Float = 0.15f,
-    val ballY: Float = 0.50f,
+    val ballX: Float = 0.50f,
+    val ballY: Float = 0.90f,
 
-    val holeX: Float = 0.85f,
-    val holeY: Float = 0.50f,
+    val holeX: Float = 0.50f,
+    val holeY: Float = 0.10f,
 
     val holeCompleted: Boolean = false,
 

@@ -1,6 +1,7 @@
 package com.example.golfitopc.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -111,19 +112,66 @@ fun HomeScreen(
                         fontSize = 13.sp,
                         color = Color(0xFFE65100)
                     )
-                    Spacer(modifier = Modifier.height(6.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center,
-                        verticalAlignment = Alignment.CenterVertically
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    // NUEVA TABLA DE PUNTUACIONES MÁS ESTÉTICA
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(8.dp))
+                            .border(1.dp, Color(0xFFE65100).copy(alpha = 0.5f), RoundedCornerShape(8.dp))
                     ) {
-                        state.holeScores.entries.sortedBy { it.key }.forEach { entry ->
+                        // Fila de Encabezados
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color(0xFFFFCC80))
+                                .padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
                             Text(
-                                text = if (state.isEnglish) " [Hole ${entry.key}: ${entry.value} str] " else " [Hoyo ${entry.key}: ${entry.value} gpl] ",
-                                fontSize = 12.sp,
-                                fontWeight = FontWeight.Bold,
+                                text = if (state.isEnglish) "Hole" else "Hoyo",
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center,
+                                fontWeight = FontWeight.ExtraBold,
                                 color = Color(0xFF3E2723)
                             )
+                            Text(
+                                text = if (state.isEnglish) "Strokes" else "Golpes",
+                                modifier = Modifier.weight(1f),
+                                textAlign = TextAlign.Center,
+                                fontWeight = FontWeight.ExtraBold,
+                                color = Color(0xFF3E2723)
+                            )
+                        }
+
+                        // Filas de Datos
+                        state.holeScores.entries.sortedBy { it.key }.forEachIndexed { index, entry ->
+                            // Alternar color para efecto "cebra"
+                            val rowBackground = if (index % 2 == 0) Color.White else Color(0xFFFFF8E1)
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(rowBackground)
+                                    .padding(vertical = 8.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "${entry.key}",
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF3E2723)
+                                )
+                                Text(
+                                    text = "${entry.value}",
+                                    modifier = Modifier.weight(1f),
+                                    textAlign = TextAlign.Center,
+                                    fontWeight = FontWeight.Bold,
+                                    color = Color(0xFF3E2723)
+                                )
+                            }
                         }
                     }
                 }
@@ -154,7 +202,7 @@ fun HomeScreen(
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-                
+
                 Text(
                     text = if (state.isEnglish) "TOUCH AIM & SENSOR FORCE:" else "TOQUE PARA APUNTAR Y FUERZA SENSOR:",
                     fontWeight = FontWeight.Bold,
@@ -169,9 +217,9 @@ fun HomeScreen(
                     },
                     style = MaterialTheme.typography.bodySmall
                 )
-                
+
                 Spacer(modifier = Modifier.height(10.dp))
-                
+
                 Text(
                     text = if (state.isEnglish) "FULL SENSOR MODE:" else "MODO SENSOR COMPLETO:",
                     fontWeight = FontWeight.Bold,
@@ -196,7 +244,7 @@ fun HomeScreen(
             color = Color.White,
             fontWeight = FontWeight.Bold
         )
-        
+
         Row(
             modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
