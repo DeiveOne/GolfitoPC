@@ -2,7 +2,6 @@ package com.example.golfitopc.game
 
 import com.example.golfitopc.model.Hole
 import kotlin.math.cos
-import kotlin.math.min
 import kotlin.math.sin
 import kotlin.math.sqrt
 import kotlin.math.pow
@@ -186,5 +185,4 @@ object GameEngine {
         )
     }
 
-    fun reset(): GameState = GameState()
 }
