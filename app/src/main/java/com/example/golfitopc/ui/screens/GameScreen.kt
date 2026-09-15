@@ -1,4 +1,4 @@
-package com.example.golfitopc.ui
+package com.example.golfitopc.ui.screens
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.LinearEasing
@@ -42,7 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.golfitopc.game.GameState
 import com.example.golfitopc.game.SensorMode
-import com.example.golfitopc.game.getObstaclesForLevel // <- Importante: Lee los datos del motor
+import com.example.golfitopc.game.getObstaclesForLevel
+import com.example.golfitopc.ui.Strings
 import com.example.golfitopc.ui.theme.GolfBallWhite
 import com.example.golfitopc.ui.theme.GolfCourseGreen
 import com.example.golfitopc.ui.theme.GolfHoleBlack
@@ -121,8 +122,8 @@ fun MainGameView(
                 jobX.join()
                 jobY.join()
 
-                prevX = animatedX.value
-                prevY = animatedY.value
+                prevX = waypoint.first
+                prevY = waypoint.second
             }
         } else {
             animatedX.snapTo(state.ballX)
@@ -147,11 +148,11 @@ fun MainGameView(
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Red.copy(alpha = 0.7f)),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text(if (state.isEnglish) "Exit" else "Salir", color = Color.White)
+                Text(Strings.get("btn_exit", state.isEnglish), color = Color.White)
             }
 
             Text(
-                text = if (state.isEnglish) "Hole ${state.holeNumber}" else "Hoyo ${state.holeNumber}",
+                text = "${Strings.get("table_hole", state.isEnglish)} ${state.holeNumber}",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
@@ -161,7 +162,7 @@ fun MainGameView(
                 colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray),
                 shape = RoundedCornerShape(8.dp)
             ) {
-                Text(if (state.isEnglish) "Restart" else "Reiniciar", color = Color.White)
+                Text(Strings.get("btn_restart", state.isEnglish), color = Color.White)
             }
         }
 
@@ -172,11 +173,11 @@ fun MainGameView(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Card(colors = CardDefaults.cardColors(containerColor = Color.White)) {
-                Text(" Par: ${state.par} ", modifier = Modifier.padding(8.dp), fontWeight = FontWeight.Medium)
+                Text(" ${Strings.get("label_par", state.isEnglish)} ${state.par} ", modifier = Modifier.padding(8.dp), fontWeight = FontWeight.Medium)
             }
             Card(colors = CardDefaults.cardColors(containerColor = Color(0xFFFFD54F))) {
                 Text(
-                    text = if (state.isEnglish) " Strokes: ${state.strokes} " else " Golpes: ${state.strokes} ",
+                    text = " ${Strings.get("label_strokes", state.isEnglish)} ${state.strokes} ",
                     modifier = Modifier.padding(8.dp),
                     fontWeight = FontWeight.ExtraBold
                 )
@@ -199,7 +200,7 @@ fun MainGameView(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = if (state.isEnglish) "⚡ REAL-TIME SWING POWER" else "⚡ FUERZA DE SWING EN TIEMPO REAL",
+                        text = Strings.get("label_power", state.isEnglish),
                         fontWeight = FontWeight.Bold,
                         fontSize = 11.sp,
                         color = Color.DarkGray
@@ -333,7 +334,7 @@ fun MainGameView(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = if (state.isEnglish) "HOLE COMPLETED!" else "¡HOYO COMPLETADO!",
+                        text = Strings.get("hole_completed", state.isEnglish),
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF2E7D32)
                     )
@@ -343,7 +344,7 @@ fun MainGameView(
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2E7D32))
                     ) {
-                        Text(if (state.isEnglish) "Next Level" else "Siguiente Nivel", color = Color.White)
+                        Text(Strings.get("btn_next_level", state.isEnglish), color = Color.White)
                     }
                 }
             }
@@ -351,9 +352,9 @@ fun MainGameView(
             Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = if (state.sensorMode == SensorMode.TOUCH_AIM_SENSOR_FORCE) {
-                    if (state.isEnglish) "Aim on screen and shake to shoot" else "Apunta en pantalla y agita para tirar"
+                    Strings.get("hint_touch", state.isEnglish)
                 } else {
-                    if (state.isEnglish) "Tilt mobile to aim and swing to shoot" else "Inclina el móvil para apuntar y tira"
+                    Strings.get("hint_sensor", state.isEnglish)
                 },
                 textAlign = TextAlign.Center,
                 fontSize = 14.sp,

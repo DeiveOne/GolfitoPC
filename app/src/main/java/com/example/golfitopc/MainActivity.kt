@@ -19,8 +19,8 @@ import com.example.golfitopc.game.GameEngine
 import com.example.golfitopc.game.GameState
 import com.example.golfitopc.game.SensorMode
 import com.example.golfitopc.sensor.SensorManagerHelper
-import com.example.golfitopc.ui.GameScreen
-import com.example.golfitopc.ui.SwingDetector
+import com.example.golfitopc.ui.components.SwingDetector
+import com.example.golfitopc.ui.screens.GameScreen
 import com.example.golfitopc.ui.theme.GolfitoPCTheme
 
 class MainActivity : ComponentActivity() {

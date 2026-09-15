@@ -1,4 +1,4 @@
-package com.example.golfitopc.ui
+package com.example.golfitopc.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -36,6 +36,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.unit.sp
 import com.example.golfitopc.game.GameState
 import com.example.golfitopc.game.SensorMode
+import com.example.golfitopc.ui.Strings
 
 @Composable
 fun HomeScreen(
@@ -91,7 +92,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(16.dp))
 
         Text(
-            text = "Golfito PC",
+            text = Strings.get("app_name", state.isEnglish),
             style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.ExtraBold,
             color = Color.White,
@@ -112,21 +113,21 @@ fun HomeScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = if (state.isEnglish) "🏆 YOUR CURRENT SCOREBOARD 🏆" else "🏆 TU TABLA DE PUNTUACIONES 🏆",
+                        text = Strings.get("scoreboard_title", state.isEnglish),
                         fontWeight = FontWeight.Black,
                         fontSize = 13.sp,
                         color = Color(0xFF1B5E20)
                     )
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    // NUEVA TABLA DE PUNTUACIONES MÁS ESTÉTICA CON PALETA VERDE DE GOLF
+                    // TABLA DE PUNTUACIONES TEMÁTICA
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(8.dp))
                             .border(1.dp, Color(0xFF1B5E20).copy(alpha = 0.4f), RoundedCornerShape(8.dp))
                     ) {
-                        // Fila de Encabezados (Verde Temático)
+                        // Fila de Encabezados
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -135,14 +136,14 @@ fun HomeScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(
-                                text = if (state.isEnglish) "Hole" else "Hoyo",
+                                text = Strings.get("table_hole", state.isEnglish),
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center,
                                 fontWeight = FontWeight.ExtraBold,
                                 color = Color(0xFF1B5E20)
                             )
                             Text(
-                                text = if (state.isEnglish) "Strokes" else "Golpes",
+                                text = Strings.get("table_strokes", state.isEnglish),
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center,
                                 fontWeight = FontWeight.ExtraBold,
@@ -150,9 +151,8 @@ fun HomeScreen(
                             )
                         }
 
-                        // Filas de Datos (Gama de blancos y verdes sutiles)
+                        // Filas de Datos
                         state.holeScores.entries.sortedBy { it.key }.forEachIndexed { index, entry ->
-                            // Alternar color para efecto "cebra" usando la gama verde
                             val rowBackground = if (index % 2 == 0) Color.White else Color(0xFFF1F8E9)
 
                             Row(
@@ -192,51 +192,39 @@ fun HomeScreen(
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    text = if (state.isEnglish) "📖 Instructions:" else "📖 Instrucciones:",
+                    text = Strings.get("instructions_title", state.isEnglish),
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleMedium,
                     color = Color(0xFF1B5E20)
                 )
                 Spacer(modifier = Modifier.height(6.dp))
                 Text(
-                    text = if (state.isEnglish) {
-                        "Select your preferred shot mode and get ready for the swing."
-                    } else {
-                        "Selecciona tu modo de golpeo preferido y prepárate para el swing."
-                    },
+                    text = Strings.get("instructions_desc", state.isEnglish),
                     style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = if (state.isEnglish) "TOUCH AIM & SENSOR FORCE:" else "TOQUE PARA APUNTAR Y FUERZA SENSOR:",
+                    text = Strings.get("mode_touch_title", state.isEnglish),
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
                     color = Color(0xFF283593)
                 )
                 Text(
-                    text = if (state.isEnglish) {
-                        "Drag your finger on the screen to aim, then shake the device to strike."
-                    } else {
-                        "Arrastra tu dedo en la pantalla para apuntar, luego agita el dispositivo para golpear."
-                    },
+                    text = Strings.get("mode_touch_desc", state.isEnglish),
                     style = MaterialTheme.typography.bodySmall
                 )
 
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    text = if (state.isEnglish) "FULL SENSOR MODE:" else "MODO SENSOR COMPLETO:",
+                    text = Strings.get("mode_sensor_title", state.isEnglish),
                     fontWeight = FontWeight.Bold,
                     fontSize = 12.sp,
                     color = Color(0xFF00695C)
                 )
                 Text(
-                    text = if (state.isEnglish) {
-                        "Tilt the device to aim and perform a physical swinging motion to strike."
-                    } else {
-                        "Inclina el dispositivo para apuntar y realiza un movimiento físico de swing para golpear."
-                    },
+                    text = Strings.get("mode_sensor_desc", state.isEnglish),
                     style = MaterialTheme.typography.bodySmall
                 )
             }
@@ -245,7 +233,7 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
-            text = if (state.isEnglish) "Select Shot Mode:" else "Selecciona Modo de Golpeo:",
+            text = Strings.get("select_mode", state.isEnglish),
             color = Color.White,
             fontWeight = FontWeight.Bold
         )
@@ -261,7 +249,7 @@ fun HomeScreen(
                 ),
                 modifier = Modifier.weight(1f)
             ) {
-                Text(if (state.isEnglish) "Touch + Force" else "Toque + Fuerza", color = Color.White)
+                Text(Strings.get("btn_touch_force", state.isEnglish), color = Color.White)
             }
             Spacer(modifier = Modifier.width(8.dp))
             Button(
@@ -271,7 +259,7 @@ fun HomeScreen(
                 ),
                 modifier = Modifier.weight(1f)
             ) {
-                Text(if (state.isEnglish) "Full Sensor" else "Sensor Completo", color = Color.White)
+                Text(Strings.get("btn_full_sensor", state.isEnglish), color = Color.White)
             }
         }
 
@@ -284,7 +272,7 @@ fun HomeScreen(
             shape = RoundedCornerShape(28.dp)
         ) {
             Text(
-                text = if (state.isEnglish) "PLAY NOW!" else "¡JUGAR AHORA!",
+                text = Strings.get("btn_play", state.isEnglish),
                 fontWeight = FontWeight.ExtraBold,
                 fontSize = 18.sp,
                 color = Color(0xFF424242)

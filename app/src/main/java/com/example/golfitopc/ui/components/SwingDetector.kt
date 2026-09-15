@@ -1,4 +1,4 @@
-package com.example.golfitopc.ui
+package com.example.golfitopc.ui.components
 
 import android.content.Context
 import android.hardware.Sensor
