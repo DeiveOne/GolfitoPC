@@ -119,6 +119,23 @@ object GameEngine {
             }
 
             // C. Resolver movimiento y rebote
+            val stepDist = if (closestDist >= remainingDistance) remainingDistance else closestDist
+
+            // Verificar matemáticamente si en este tramo rectilíneo la pelota toca o cruza el hoyo
+            val tHole = (state.holeX - currentX) * dirX + (state.holeY - currentY) * dirY
+            val tHoleClamped = tHole.coerceIn(0f, stepDist)
+            val checkX = currentX + dirX * tHoleClamped
+            val checkY = currentY + dirY * tHoleClamped
+            val dToHole = sqrt((checkX - state.holeX).pow(2) + (checkY - state.holeY).pow(2))
+
+            if (dToHole <= HOLE_RADIUS) {
+                // Si cruza el rango del hoyo, cae inmediatamente dentro y termina su recorrido en el centro
+                currentX = state.holeX
+                currentY = state.holeY
+                waypoints.add(Pair(currentX, currentY))
+                break
+            }
+
             if (closestDist >= remainingDistance) {
                 currentX += dirX * remainingDistance
                 currentY += dirY * remainingDistance

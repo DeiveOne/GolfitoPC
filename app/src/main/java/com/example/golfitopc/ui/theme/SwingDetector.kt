@@ -36,8 +36,8 @@ fun SwingDetector(onSwing: (Float) -> Unit) {
 
                         if (magnitude > SWING_THRESHOLD) {
                             lastUpdate = currentTime
-                            // Aumentar la sensibilidad multiplicando la fuerza resultante por 1.8f
-                            val normalizedForce = ((magnitude / MAX_SWING) * 1.8f).coerceIn(0.1f, 1.0f)
+                            // Aumentar la sensibilidad multiplicando la fuerza resultante por 2.5f para simular un golpe fuerte real
+                            val normalizedForce = ((magnitude / MAX_SWING) * 2.5f).coerceIn(0.1f, 1.0f)
                             onSwing(normalizedForce)
                         }
                     }

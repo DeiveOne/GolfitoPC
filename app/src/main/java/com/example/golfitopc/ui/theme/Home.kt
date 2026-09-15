@@ -31,6 +31,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.unit.sp
 import com.example.golfitopc.game.GameState
 import com.example.golfitopc.game.SensorMode
@@ -42,10 +44,13 @@ fun HomeScreen(
     onStartGame: () -> Unit,
     onToggleLanguage: () -> Unit
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Brush.verticalGradient(listOf(Color(0xFF1B5E20), Color(0xFF4CAF50))))
+            .verticalScroll(scrollState)
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
@@ -98,7 +103,7 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(12.dp))
             Card(
                 modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFFFE082)),
+                colors = CardDefaults.cardColors(containerColor = Color.White.copy(alpha = 0.95f)),
                 shape = RoundedCornerShape(12.dp),
                 elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
             ) {
@@ -110,22 +115,22 @@ fun HomeScreen(
                         text = if (state.isEnglish) "🏆 YOUR CURRENT SCOREBOARD 🏆" else "🏆 TU TABLA DE PUNTUACIONES 🏆",
                         fontWeight = FontWeight.Black,
                         fontSize = 13.sp,
-                        color = Color(0xFFE65100)
+                        color = Color(0xFF1B5E20)
                     )
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    // NUEVA TABLA DE PUNTUACIONES MÁS ESTÉTICA
+                    // NUEVA TABLA DE PUNTUACIONES MÁS ESTÉTICA CON PALETA VERDE DE GOLF
                     Column(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clip(RoundedCornerShape(8.dp))
-                            .border(1.dp, Color(0xFFE65100).copy(alpha = 0.5f), RoundedCornerShape(8.dp))
+                            .border(1.dp, Color(0xFF1B5E20).copy(alpha = 0.4f), RoundedCornerShape(8.dp))
                     ) {
-                        // Fila de Encabezados
+                        // Fila de Encabezados (Verde Temático)
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(Color(0xFFFFCC80))
+                                .background(Color(0xFFC8E6C9))
                                 .padding(vertical = 8.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -134,21 +139,21 @@ fun HomeScreen(
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center,
                                 fontWeight = FontWeight.ExtraBold,
-                                color = Color(0xFF3E2723)
+                                color = Color(0xFF1B5E20)
                             )
                             Text(
                                 text = if (state.isEnglish) "Strokes" else "Golpes",
                                 modifier = Modifier.weight(1f),
                                 textAlign = TextAlign.Center,
                                 fontWeight = FontWeight.ExtraBold,
-                                color = Color(0xFF3E2723)
+                                color = Color(0xFF1B5E20)
                             )
                         }
 
-                        // Filas de Datos
+                        // Filas de Datos (Gama de blancos y verdes sutiles)
                         state.holeScores.entries.sortedBy { it.key }.forEachIndexed { index, entry ->
-                            // Alternar color para efecto "cebra"
-                            val rowBackground = if (index % 2 == 0) Color.White else Color(0xFFFFF8E1)
+                            // Alternar color para efecto "cebra" usando la gama verde
+                            val rowBackground = if (index % 2 == 0) Color.White else Color(0xFFF1F8E9)
 
                             Row(
                                 modifier = Modifier
@@ -162,14 +167,14 @@ fun HomeScreen(
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center,
                                     fontWeight = FontWeight.Bold,
-                                    color = Color(0xFF3E2723)
+                                    color = Color(0xFF37474F)
                                 )
                                 Text(
                                     text = "${entry.value}",
                                     modifier = Modifier.weight(1f),
                                     textAlign = TextAlign.Center,
                                     fontWeight = FontWeight.Bold,
-                                    color = Color(0xFF3E2723)
+                                    color = Color(0xFF37474F)
                                 )
                             }
                         }

@@ -89,8 +89,8 @@ class SensorManagerHelper(
 
         lastShotTime = currentTime
 
-        // Convertimos el movimiento en una fuerza entre 0 y 1, haciéndola más sensible multiplicando por 1.8f
-        val force = ((movement / 15f) * 1.8f).coerceIn(0.1f, 1.0f)
+        // Convertimos el movimiento en una fuerza entre 0 y 1, haciéndola más sensible multiplicando por 2.5f para imitar un palo real
+        val force = ((movement / 15f) * 2.5f).coerceIn(0.1f, 1.0f)
 
         onShotDetected(force, currentDirection)
     }

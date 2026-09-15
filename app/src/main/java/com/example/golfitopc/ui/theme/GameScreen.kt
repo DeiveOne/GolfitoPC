@@ -121,8 +121,8 @@ fun MainGameView(
                 jobX.join()
                 jobY.join()
 
-                prevX = waypoint.first
-                prevY = waypoint.second
+                prevX = animatedX.value
+                prevY = animatedY.value
             }
         } else {
             animatedX.snapTo(state.ballX)
@@ -312,8 +312,8 @@ fun MainGameView(
                     )
                 }
 
-                // Pelota
-                val finalBallPos = if (state.holeCompleted) holePosition else ballPosition
+                // Pelota (La animación corre fluida usando ballPosition calculada por la corrutina animatedX/Y)
+                val finalBallPos = ballPosition
                 drawCircle(
                     color = GolfBallWhite,
                     radius = 18f,
